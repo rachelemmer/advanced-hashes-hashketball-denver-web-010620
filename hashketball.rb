@@ -5,7 +5,7 @@ def game_hash
     away: { 
       team_name: 'Charlotte Hornets',
       colors: %w[Turquoise Purple],
-    players: [
+      players: [
               { player_name: 'Jeff Adrien',
                 number: 4,
                 shoe: 18,
@@ -105,12 +105,12 @@ def game_hash
 end
 
 def num_points_scored(players_name)
-  game_hash.each do |place, team| 
-    team.each do |attribute, data|
+  game_hash.each do |place, team|
+    team.each do |attribute, data| 
       if attribute == :players
-        data.each do |player|
+        data.each do |player| 
           if player[:player_name] == players_name
-            return player[:points]      
+            return player[:points]
           end
         end
       end
@@ -119,12 +119,12 @@ def num_points_scored(players_name)
 end
 
 def shoe_size(players_name)
-  game_hash.each do |place, team| 
-    team.each do |attribute, data|
+  game_hash.each do |place, team|
+    team.each do |attribute, data| 
       if attribute == :players
-        data.each do |player|
+        data.each do |player| 
           if player[:player_name] == players_name
-            return player[:shoe]      
+            return player[:shoe]
           end
         end
       end
@@ -138,46 +138,48 @@ def team_colors(team_name)
       return team[:colors]
     end
   end
-end
+end 
 
 def team_names
-  game_hash.map do |place, team| 
-    team[:team_name]
-  end  
-end    
+  teams = []
+  game_hash.each do |place, team| 
+    teams << team[:team_name]
+  end
+teams
+end 
 
 def player_numbers(team_name)
-  jerseys = []
+  nums = []
   game_hash.each do |place, team| 
     if team[:team_name] == team_name
-      team.each do |attributes, data| 
-        if attributes == :players 
+      team.each do |attribute, data| 
+        if attribute == :players
           data.each do |player| 
-            jerseys << player[:number]
+            nums << player[:number]
           end 
-        end 
-      end 
-    end 
-  end 
-  jerseys
+        end
+      end
+    end
+  end
+nums 
 end 
 
 def player_stats(players_name)
-  new_hash = {}
-  game_hash.each do |place, team| 
-    team.each do |attributes, data| 
-      if attributes == :players 
-        data.each do |player| 
-          if player[:player_name] == players_name
-            new_hash = player.delete_if do |k, v| 
+  stats = {}
+  game_hash.each do |place, team|
+    team.each do |attribute, data| 
+      if attribute == :players
+       data.each do |player|
+         if player[:player_name] == players_name
+           stats = player.delete_if do |k, v| 
               k == :player_name
-            end
+            end 
           end
         end
       end
     end
-  end 
-  new_hash
+  end
+  stats
 end 
 
 def big_shoe_rebounds
@@ -193,4 +195,63 @@ def big_shoe_rebounds
   end 
   return rebounds
 end 
-  
+
+def most_points_scored 
+  points = 0 
+  player_name = " "
+  game_hash.each do |team, info| 
+   info[:players].each do |player|
+     if player[:points] > points
+      points = player[:points]
+      player_name = player[:player_name]
+      end
+    end 
+  end 
+return player_name 
+end 
+
+def winning_team 
+  home_points = []
+  away_points = [] 
+  game_hash.each do |place, team| 
+    if team[:team_name] == "Brooklyn Nets"
+      team.each do |attributes, data| 
+        if attributes == :players 
+          data.each do |player| 
+            home_points << player[:points]
+          end
+        end 
+      end
+    end 
+  end
+  if team[:team_name] == "Charlotte Hornets"
+    team.each do |attributes, data| 
+        if attributes == :players 
+          data.each do |player| 
+            away_points << player[:points]
+          end
+        end 
+      end
+    end 
+if home_points.reduce > away_points.reduce 
+    return "Brooklyn Nets"
+else 
+    return "Charlotte Hornets"
+  end
+end 
+
+def player_with_longest_name
+  name_length = 0 
+  player_name = " "
+  game_hash.each do |team, info| 
+  info[:players].each do |player|
+     if player[:player_name].length > name_length
+       name_length = player[:player_name].length
+       player_name = player[:player_name]
+      end
+    end
+  end
+return player_name 
+end 
+
+
